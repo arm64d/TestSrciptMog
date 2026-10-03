@@ -1,14 +1,26 @@
-local Fluent = loadstring(game:HttpGet("https://github.com/StyearX/Fluent-modded/releases/download/1.5.1/FluentPro"))()
+local Fluent
+pcall(function()
+    Fluent = loadstring(game:HttpGet("https://github.com/StyearX/Fluent-modded/releases/download/1.5.1/FluentPro"))()
+end)
+if not Fluent then
+    return warn("[Hiruku] Fluent не загрузился")
+end
+
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local CoreGui = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
-local LocalPlayer = Players.LocalPlayer
+local SoundService = game:GetService("SoundService")
+local HttpService = game:GetService("HttpService")
+local TeleportService = game:GetService("TeleportService")
 local VirtualUser = game:GetService("VirtualUser")
+local LocalPlayer = Players.LocalPlayer
 
 local function Notify(title, content, ntype, icon, duration)
+    pcall(function()
+        Fluent:Notify({ Title = title, Content = content, Type = ntype or "Info", Icon = icon, Duration = duration or 3 })
+    end)
 end
 
 local ANIME_BG = "rbxassetid://133541508207801"
@@ -114,13 +126,13 @@ for name, theme in pairs(THEMES) do
     theme.BackgroundTransparency = .12
     theme.ViewportBackgroundImages = true
     theme.DropdownOutsideWindowBackgroundImages = true
-    Fluent:RegisterCustomTheme(name, theme)
+    pcall(function() Fluent:RegisterCustomTheme(name, theme) end)
 end
 
 local Window = Fluent:CreateWindow({
     Title = "HIRUKU LUA",
     SubTitle = "Mog Evolution",
-    Version = "v1.1.0",
+    Version = "v1.2.0",
     TabWidth = 130,
     Size = UDim2.fromOffset(580,410),
     Acrylic = true,
@@ -134,31 +146,29 @@ local Window = Fluent:CreateWindow({
     UserInfoColor = Color3.fromRGB(185,70,255),
 })
 
-
+pcall(function()
+    Fluent:SetErrorHandler(function(msg) Notify("Error", tostring(msg), "Error", nil, 5) end)
+end)
 
 local Tabs = {
-    Info = Window:AddTab({ Title = "Info", Icon = "solar/info-circle-bold" }),
     Farm = Window:AddTab({ Title = "Farm", Icon = "solar/box-minimalistic-bold" }),
     Character = Window:AddTab({ Title = "Character", Icon = "solar/user-bold" }),
     Misc = Window:AddTab({ Title = "Misc", Icon = "solar/rocket-2-bold" }),
     Settings = Window:AddTab({ Title = "Settings", Icon = "solar/tuning-2-bold" }),
 }
 
-local secInfo = Tabs.Info:AddSection("Information","solar/info-square-bold")
-secInfo:AddParagraph({ Title = "Hiruku Lua", Content = "Cheat menu for +1 Mog Evolution" })
-secInfo:AddDivider()
-secInfo:AddParagraph({ Title = "Version", Content = "v1.1.0" })
-
 local state = {
     autoClick = false,
-    autoClickSpeed = 20,
+    autoClickSpeed = 10,
     autoClickConn = nil,
+    autoClickRemotes = {},
     speedEnabled = false,
     walkSpeed = 100,
     jumpPower = 100,
     flyEnabled = false,
     flySpeed = 200,
     flyConn = nil,
+    flyKeyConn = nil,
     infiniteJump = false,
     antiAFK = true,
     autoRebirth = false,
@@ -170,6 +180,7 @@ local state = {
     autoTeleportWins = false,
     autoTeleportConn = nil,
     winPoint = nil,
+    lastTeleport = 0,
 }
 
 local function getChar()
@@ -181,7 +192,7 @@ local function getChar()
     return c, hrp, hum
 end
 
-local function getClickRemotes()
+local function refreshClickRemotes()
     local remotes = {}
     for _, obj in ipairs(ReplicatedStorage:GetDescendants()) do
         if obj:IsA("RemoteEvent") then
@@ -191,32 +202,7 @@ local function getClickRemotes()
             end
         end
     end
-    return remotes
-end
-
-local function getWinRemotes()
-    local remotes = {}
-    for _, obj in ipairs(ReplicatedStorage:GetDescendants()) do
-        if obj:IsA("RemoteEvent") or obj:IsA("RemoteFunction") then
-            local n = obj.Name:lower()
-            if n:find("win") or n:find("reward") or n:find("claim") or n:find("prize") or n:find("getreward") then
-                table.insert(remotes, obj)
-            end
-        end
-    end
-    return remotes
-end
-
-local function getRebirthRemotes()
-    local remotes = {}
-    for _, obj in ipairs(ReplicatedStorage:GetDescendants()) do
-        if obj:IsA("RemoteEvent") or obj:IsA("RemoteFunction") then
-            local n = obj.Name:lower()
-            if n:find("rebirth") or n:find("ascend") or n:find("prestige") then
-                table.insert(remotes, obj)
-            end
-        end
-    end
+    state.autoClickRemotes = remotes
     return remotes
 end
 
@@ -226,11 +212,10 @@ local function findWinButton()
     for _, obj in ipairs(pg:GetDescendants()) do
         if obj:IsA("TextButton") or obj:IsA("ImageButton") then
             local name = obj.Name:lower()
-            local text = ""
-            if obj:IsA("TextButton") then text = (obj.Text or ""):lower() end
-            if name:find("win") or name:find("claim") or name:find("reward") or
-               text:find("500") or text:find("claim") or text:find("win") or text:find("get") then
-                if obj.Visible and obj.AbsoluteSize.X > 20 then
+            local text = obj:IsA("TextButton") and (obj.Text or ""):lower() or ""
+            if (name:find("win") or name:find("claim") or name:find("reward") or
+                text:find("claim") or text:find("get") or text:find("500")) and obj.Visible then
+                if obj.AbsoluteSize.X > 20 and obj.AbsoluteSize.Y > 20 then
                     return obj
                 end
             end
@@ -241,52 +226,76 @@ end
 
 local function fireButton(btn)
     if not btn then return false end
+    local ok = false
     pcall(function()
         if firesignal and btn.Activated then
             firesignal(btn.Activated)
+            ok = true
         end
+    end)
+    pcall(function()
         if firesignal and btn.MouseButton1Click then
             firesignal(btn.MouseButton1Click)
+            ok = true
         end
-        if firesignal and btn.MouseButton1Down then
-            firesignal(btn.MouseButton1Down)
-        end
+    end)
+    pcall(function()
         if getconnections then
             for _, c in pairs(getconnections(btn.MouseButton1Click)) do
-                if c.Fire then c:Fire() end
+                if c.Fire then c:Fire() ok = true end
             end
             for _, c in pairs(getconnections(btn.Activated)) do
-                if c.Fire then c:Fire() end
+                if c.Fire then c:Fire() ok = true end
             end
         end
     end)
-    return true
+    return ok
+end
+
+local function findWinPoint()
+    if state.winPoint and state.winPoint.Parent then return state.winPoint end
+    local keywords = {"win", "reward", "prize", "claim"}
+    for _, obj in ipairs(workspace:GetDescendants()) do
+        if obj:IsA("BasePart") then
+            local n = obj.Name:lower()
+            for _, kw in ipairs(keywords) do
+                if n:find(kw) then
+                    state.winPoint = obj
+                    return obj
+                end
+            end
+        end
+    end
+    return nil
 end
 
 local function startAutoClick()
-    local remotes = getClickRemotes()
+    local remotes = refreshClickRemotes()
     if #remotes == 0 then
-        Notify("Auto Click","Remote не найден","Error",nil,5)
+        Notify("Auto Click", "Remote не найден", "Error", nil, 5)
         return false
     end
     state.autoClick = true
     local idx = 0
     state.autoClickConn = RunService.Heartbeat:Connect(function()
         if not state.autoClick then return end
-        for i = 1, state.autoClickSpeed do
+        for _ = 1, state.autoClickSpeed do
             idx = idx + 1
-            if idx > #remotes then idx = 1 end
-            pcall(function() remotes[idx]:FireServer() end)
+            if idx > #state.autoClickRemotes then idx = 1 end
+            local r = state.autoClickRemotes[idx]
+            if r and r.Parent then
+                pcall(function() r:FireServer() end)
+            end
         end
     end)
-    Notify("Auto Click","Включён (".. #remotes .." remotes)","Success",nil,3)
+    Notify("Auto Click", "Включён (" .. #remotes .. " remotes)", "Success", nil, 3)
     return true
 end
 
 local function stopAutoClick()
     state.autoClick = false
     if state.autoClickConn then state.autoClickConn:Disconnect() state.autoClickConn = nil end
-    Notify("Auto Click","Выключен","Info",nil,2)
+    Notify("Auto Click", "Выключен", "Info", nil, 2)
 end
 
 local function startAutoClaimWins()
@@ -294,84 +303,59 @@ local function startAutoClaimWins()
     state.autoClaimConn = RunService.Heartbeat:Connect(function()
         if not state.autoClaimWins then return end
         local btn = findWinButton()
-        if btn then
-            fireButton(btn)
-        end
-        local remotes = getWinRemotes()
-        for _, r in ipairs(remotes) do
-            pcall(function()
-                if r:IsA("RemoteFunction") then r:InvokeServer()
-                else r:FireServer() end
-            end)
-        end
-        local fireWin = getWinRemotes()
+        if btn then fireButton(btn) end
         for _, r in ipairs(ReplicatedStorage:GetDescendants()) do
             if r:IsA("RemoteEvent") or r:IsA("RemoteFunction") then
                 local n = r.Name:lower()
-                if n:find("500") or n:find("givewin") or n:find("addwin") then
+                if n:find("win") or n:find("reward") or n:find("claim") or n:find("prize") then
                     pcall(function()
-                        if r:IsA("RemoteFunction") then r:InvokeServer(500)
-                        else r:FireServer(500) end
+                        if r:IsA("RemoteFunction") then r:InvokeServer()
+                        else r:FireServer() end
                     end)
                 end
             end
         end
     end)
-    Notify("Auto Claim Wins","Включён","Success",nil,3)
+    Notify("Auto Claim Wins", "Включён", "Success", nil, 3)
 end
 
 local function stopAutoClaimWins()
     state.autoClaimWins = false
     if state.autoClaimConn then state.autoClaimConn:Disconnect() state.autoClaimConn = nil end
-    Notify("Auto Claim Wins","Выключен","Info",nil,2)
-end
-
-local function findWinPoint()
-    for _, obj in ipairs(workspace:GetDescendants()) do
-        if obj:IsA("BasePart") then
-            local n = obj.Name:lower()
-            if n:find("win") or n:find("reward") or n:find("prize") or n:find("claim") then
-                return obj
-            end
-        end
-        if obj:IsA("Model") then
-            local n = obj.Name:lower()
-            if n:find("win") or n:find("reward") or n:find("prize") then
-                local p = obj:FindFirstChildWhichIsA("BasePart") or obj.PrimaryPart
-                if p then return p end
-            end
-        end
-    end
-    return nil
+    Notify("Auto Claim Wins", "Выключен", "Info", nil, 2)
 end
 
 local function startAutoTeleportWins()
     state.winPoint = findWinPoint()
     if not state.winPoint then
-        Notify("Auto Teleport","Точка побед не найдена","Error",nil,5)
+        Notify("Auto Teleport", "Точка побед не найдена", "Error", nil, 5)
         return false
     end
     state.autoTeleportWins = true
     state.autoTeleportConn = RunService.Heartbeat:Connect(function()
         if not state.autoTeleportWins then return end
-        local c, hrp = getChar()
+        local now = tick()
+        if now - state.lastTeleport < 0.5 then return end
+        state.lastTeleport = now
+        local _, hrp = getChar()
         if not hrp then return end
-        if state.winPoint and state.winPoint.Parent then
-            hrp.CFrame = CFrame.new(state.winPoint.Position + Vector3.new(0,3,0))
+        local wp = state.winPoint
+        if wp and wp.Parent then
+            hrp.CFrame = CFrame.new(wp.Position + Vector3.new(0,3,0))
         end
     end)
-    Notify("Auto Teleport","Включён к ".. state.winPoint.Name,"Success",nil,3)
+    Notify("Auto Teleport", "Включён к " .. state.winPoint.Name, "Success", nil, 3)
     return true
 end
 
 local function stopAutoTeleportWins()
     state.autoTeleportWins = false
     if state.autoTeleportConn then state.autoTeleportConn:Disconnect() state.autoTeleportConn = nil end
-    Notify("Auto Teleport","Выключен","Info",nil,2)
+    Notify("Auto Teleport", "Выключен", "Info", nil, 2)
 end
 
 local function applySpeed()
-    local c, hrp, hum = getChar()
+    local _, _, hum = getChar()
     if not hum then return end
     hum.WalkSpeed = state.speedEnabled and state.walkSpeed or 16
     hum.UseJumpPower = true
@@ -379,10 +363,11 @@ local function applySpeed()
 end
 
 local function startFly()
-    local c, hrp, hum = getChar()
+    local _, hrp, hum = getChar()
     if not hrp or not hum then return end
     state.flyEnabled = true
     hum.PlatformStand = true
+
     local bv = hrp:FindFirstChild("HirukuFlyVel")
     if not bv then
         bv = Instance.new("BodyVelocity")
@@ -401,10 +386,11 @@ local function startFly()
         bg.CFrame = hrp.CFrame
         bg.Parent = hrp
     end
-    if state.flyConn then state.flyConn:Disconnect() state.flyConn = nil end
+
+    if state.flyConn then state.flyConn:Disconnect() end
     state.flyConn = RunService.RenderStepped:Connect(function()
         if not state.flyEnabled then return end
-        local cc, p = getChar()
+        local _, p = getChar()
         if not p then return end
         local bvv = p:FindFirstChild("HirukuFlyVel")
         local bgg = p:FindFirstChild("HirukuFlyGyro")
@@ -421,20 +407,21 @@ local function startFly()
         bvv.Velocity = dir * state.flySpeed
         bgg.CFrame = CFrame.new(p.Position, p.Position + cam.CFrame.LookVector)
     end)
-    Notify("Fly","Включён","Success",nil,3)
+
+    Notify("Fly", "Включён", "Success", nil, 3)
 end
 
 local function stopFly()
     state.flyEnabled = false
     if state.flyConn then state.flyConn:Disconnect() state.flyConn = nil end
-    local c, hrp, hum = getChar()
+    local _, hrp, hum = getChar()
     if hrp then
         local bv = hrp:FindFirstChild("HirukuFlyVel") if bv then bv:Destroy() end
         local bg = hrp:FindFirstChild("HirukuFlyGyro") if bg then bg:Destroy() end
         hrp.AssemblyLinearVelocity = Vector3.zero
     end
     if hum then hum.PlatformStand = false end
-    Notify("Fly","Выключен","Info",nil,2)
+    Notify("Fly", "Выключен", "Info", nil, 2)
 end
 
 local function startNoClip()
@@ -448,7 +435,7 @@ local function startNoClip()
             if p:IsA("BasePart") then p.CanCollide = false end
         end
     end)
-    Notify("NoClip","Включён","Success",nil,2)
+    Notify("NoClip", "Включён", "Success", nil, 2)
 end
 
 local function stopNoClip()
@@ -460,28 +447,30 @@ local function stopNoClip()
             if p:IsA("BasePart") and p.Name ~= "HumanoidRootPart" then p.CanCollide = true end
         end
     end
-    Notify("NoClip","Выключен","Info",nil,2)
+    Notify("NoClip", "Выключен", "Info", nil, 2)
 end
 
 UserInputService.JumpRequest:Connect(function()
     if not state.infiniteJump then return end
-    local c, hrp, hum = getChar()
+    local _, _, hum = getChar()
     if hum then hum:ChangeState(Enum.HumanoidStateType.Jumping) end
 end)
 
 LocalPlayer.Idled:Connect(function()
     if not state.antiAFK then return end
-    VirtualUser:CaptureController()
-    VirtualUser:ClickButton2(Vector2.new())
+    pcall(function()
+        VirtualUser:CaptureController()
+        VirtualUser:ClickButton2(Vector2.new())
+    end)
 end)
 
-local secFarm = Tabs.Farm:AddSection("Auto Click","solar/cursor-bold")
-local secWin = Tabs.Farm:AddSection("Wins & Rewards","solar/medal-star-bold")
-local secRebirth = Tabs.Farm:AddSection("Rebirth","solar/refresh-bold")
-local secChar = Tabs.Character:AddSection("Movement","solar/rocket-bold")
-local secTeleport = Tabs.Character:AddSection("Teleport","solar/map-point-bold")
-local secMisc = Tabs.Misc:AddSection("System","solar/widget-bold")
-local secSet = Tabs.Settings:AddSection("Theme","solar/palette-bold")
+local secFarm = Tabs.Farm:AddSection("Auto Click", "solar/cursor-bold")
+local secWin = Tabs.Farm:AddSection("Wins & Rewards", "solar/medal-star-bold")
+local secRebirth = Tabs.Farm:AddSection("Rebirth", "solar/refresh-bold")
+local secChar = Tabs.Character:AddSection("Movement", "solar/rocket-bold")
+local secTeleport = Tabs.Character:AddSection("Teleport", "solar/map-point-bold")
+local secMisc = Tabs.Misc:AddSection("System", "solar/widget-bold")
+local secSet = Tabs.Settings:AddSection("Theme", "solar/palette-bold")
 
 secFarm:AddToggle("AutoClick", {
     Title = "Auto Click",
@@ -494,24 +483,24 @@ secFarm:AddToggle("AutoClick", {
 secFarm:AddSlider("ClickSpeed", {
     Title = "Clicks Per Frame",
     Icon = "solar/speedometer-bold",
-    Min = 1, Max = 100, Default = 20, Rounding = 0,
+    Min = 1, Max = 50, Default = 10, Rounding = 0,
     Callback = function(v) state.autoClickSpeed = v end
 })
 
 secWin:AddToggle("AutoClaimWins", {
     Title = "Auto Claim Wins",
-    Description = "Автоматически жмёт кнопку получения 500 побед",
+    Description = "Автоматически жмёт кнопку получения побед",
     Icon = "solar/medal-star-bold",
     Default = false,
-    Callback = function(v) if v then startAutoClaimWins() else stopAutoClaimWins() end
-end)
+    Callback = function(v) if v then startAutoClaimWins() else stopAutoClaimWins() end end
+})
 
 secWin:AddToggle("AutoTeleportWins", {
     Title = "Auto Teleport to Win Point",
     Description = "Телепортирует к точке получения побед",
     Icon = "solar/map-point-bold",
     Default = false,
-    Callback = function(v) if v then startAutoTeleportWins() else stopAutoTeleportWins() end
+    Callback = function(v) if v then startAutoTeleportWins() else stopAutoTeleportWins() end end
 })
 
 secWin:AddButton({
@@ -536,7 +525,7 @@ secWin:AddButton({
                 end
             end
         end
-        Notify("Force Claim","Отправлено "..count.." запросов","Success",nil,3)
+        Notify("Force Claim", "Отправлено " .. count .. " запросов", "Success", nil, 3)
     end
 })
 
@@ -551,19 +540,22 @@ secRebirth:AddToggle("AutoRebirth", {
         if v then
             state.autoRebirthConn = RunService.Heartbeat:Connect(function()
                 if not state.autoRebirth then return end
-                local remotes = getRebirthRemotes()
-                for _, r in ipairs(remotes) do
-                    pcall(function()
-                        if r:IsA("RemoteFunction") then r:InvokeServer()
-                        else r:FireServer() end
-                    end)
+                for _, r in ipairs(ReplicatedStorage:GetDescendants()) do
+                    if r:IsA("RemoteEvent") or r:IsA("RemoteFunction") then
+                        local n = r.Name:lower()
+                        if n:find("rebirth") or n:find("ascend") or n:find("prestige") then
+                            pcall(function()
+                                if r:IsA("RemoteFunction") then r:InvokeServer()
+                                else r:FireServer() end
+                            end)
+                        end
+                    end
                 end
                 local pg = LocalPlayer:FindFirstChild("PlayerGui")
                 if pg then
                     for _, obj in ipairs(pg:GetDescendants()) do
                         if (obj:IsA("TextButton") or obj:IsA("ImageButton")) and obj.Visible then
-                            local text = ""
-                            if obj:IsA("TextButton") then text = (obj.Text or ""):lower() end
+                            local text = obj:IsA("TextButton") and (obj.Text or ""):lower() or ""
                             if text:find("rebirth") or text:find("ascend") or obj.Name:lower():find("rebirth") then
                                 fireButton(obj)
                             end
@@ -627,18 +619,17 @@ secChar:AddToggle("NoClip", {
 
 secTeleport:AddButton({
     Title = "Teleport to Win Point",
-    Description = "Телепорт к точке побед",
     Icon = "solar/map-point-bold",
     Callback = function()
         local wp = findWinPoint()
         if wp then
-            local c, hrp = getChar()
+            local _, hrp = getChar()
             if hrp then
                 hrp.CFrame = CFrame.new(wp.Position + Vector3.new(0,3,0))
-                Notify("Teleport","К "..wp.Name,"Success",nil,2)
+                Notify("Teleport", "К " .. wp.Name, "Success", nil, 2)
             end
         else
-            Notify("Teleport","Точка не найдена","Error",nil,3)
+            Notify("Teleport", "Точка не найдена", "Error", nil, 3)
         end
     end
 })
@@ -647,12 +638,12 @@ secTeleport:AddButton({
     Title = "Teleport to Spawn",
     Icon = "solar/home-bold",
     Callback = function()
-        local c, hrp = getChar()
+        local _, hrp = getChar()
         if hrp then
             local spawn = workspace:FindFirstChildOfClass("SpawnLocation")
             if spawn then
                 hrp.CFrame = CFrame.new(spawn.Position + Vector3.new(0,3,0))
-                Notify("Teleport","К спавну","Success",nil,2)
+                Notify("Teleport", "К спавну", "Success", nil, 2)
             end
         end
     end
@@ -670,26 +661,26 @@ secMisc:AddButton({
     Icon = "solar/logout-2-bold",
     Callback = function()
         pcall(function()
-            game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, LocalPlayer)
+            TeleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId, LocalPlayer)
         end)
     end
 })
 
 secMisc:AddButton({
-    Title = "Server Hop (Random)",
+    Title = "Server Hop",
     Icon = "solar/planet-bold",
     Callback = function()
         pcall(function()
-            local url = "https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Desc&excludeFullGames=true&limit=100"
+            local url = "https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Desc&excludeFullGames=true&limit=100"
             local raw = game:HttpGet(url)
-            local data = game:GetService("HttpService"):JSONDecode(raw)
+            local data = HttpService:JSONDecode(raw)
             for _, srv in ipairs(data.data) do
                 if srv.id ~= game.JobId and srv.playing < srv.maxPlayers then
-                    game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, srv.id, LocalPlayer)
+                    TeleportService:TeleportToPlaceInstance(game.PlaceId, srv.id, LocalPlayer)
                     return
                 end
             end
-            Notify("Server Hop","Не найдено","Error",nil,3)
+            Notify("Server Hop", "Не найдено", "Error", nil, 3)
         end)
     end
 })
@@ -698,19 +689,19 @@ secMisc:AddButton({
     Title = "Reset Character",
     Icon = "solar/restart-bold",
     Callback = function()
-        local c, hrp, hum = getChar()
+        local _, _, hum = getChar()
         if hum then hum.Health = 0 end
     end
 })
 
-secSet:AddButton({ Title = "Theme: HirukuViolet", Icon = "solar/palette-bold", Callback = function() pcall(function() Fluent:SetTheme("HirukuViolet") end) Notify("Theme","HirukuViolet","Success",nil,2) end })
-secSet:AddButton({ Title = "Theme: NeonBlue", Icon = "solar/star-bold", Callback = function() Fluent:SetTheme("NeonBlue") Notify("Theme","NeonBlue","Success",nil,2) end })
-secSet:AddButton({ Title = "Theme: EmeraldDark", Icon = "solar/leaf-bold", Callback = function() Fluent:SetTheme("EmeraldDark") Notify("Theme","EmeraldDark","Success",nil,2) end })
-secSet:AddButton({ Title = "Theme: Sunset", Icon = "solar/sun-bold", Callback = function() Fluent:SetTheme("Sunset") Notify("Theme","Sunset","Success",nil,2) end })
-secSet:AddButton({ Title = "Theme: SlateStatic", Icon = "solar/pause-circle-bold", Callback = function() Fluent:SetTheme("SlateStatic") Notify("Theme","SlateStatic","Success",nil,2) end })
-secSet:AddButton({ Title = "Theme: SlateAnimated", Icon = "solar/play-circle-bold", Callback = function() Fluent:SetTheme("SlateAnimated") Notify("Theme","SlateAnimated","Success",nil,2) end })
+secSet:AddButton({ Title = "HirukuViolet", Icon = "solar/palette-bold", Callback = function() Fluent:SetTheme("HirukuViolet") Notify("Theme", "HirukuViolet", "Success", nil, 2) end })
+secSet:AddButton({ Title = "NeonBlue", Icon = "solar/star-bold", Callback = function() Fluent:SetTheme("NeonBlue") Notify("Theme", "NeonBlue", "Success", nil, 2) end })
+secSet:AddButton({ Title = "EmeraldDark", Icon = "solar/leaf-bold", Callback = function() Fluent:SetTheme("EmeraldDark") Notify("Theme", "EmeraldDark", "Success", nil, 2) end })
+secSet:AddButton({ Title = "Sunset", Icon = "solar/sun-bold", Callback = function() Fluent:SetTheme("Sunset") Notify("Theme", "Sunset", "Success", nil, 2) end })
+secSet:AddButton({ Title = "SlateStatic", Icon = "solar/pause-circle-bold", Callback = function() Fluent:SetTheme("SlateStatic") Notify("Theme", "SlateStatic", "Success", nil, 2) end })
+secSet:AddButton({ Title = "SlateAnimated", Icon = "solar/play-circle-bold", Callback = function() Fluent:SetTheme("SlateAnimated") Notify("Theme", "SlateAnimated", "Success", nil, 2) end })
 
-pcall(function() Fluent:SetTheme("HirukuViolet") end)
+Fluent:SetTheme("HirukuViolet")
 
 local toggleGui = Instance.new("ScreenGui")
 toggleGui.Name = "HirukuOpenUi"
@@ -723,8 +714,8 @@ mainBtn.Name = "HirukuButton"
 mainBtn.Parent = toggleGui
 mainBtn.BackgroundColor3 = Color3.fromRGB(20,10,35)
 mainBtn.BackgroundTransparency = 0.05
-mainBtn.Position = UDim2.new(.1,0,.1,0)
-mainBtn.Size = UDim2.new(0,60,0,60)
+mainBtn.Position = UDim2.new(.1, 0, .1, 0)
+mainBtn.Size = UDim2.new(0, 60, 0, 60)
 mainBtn.Text = "HL"
 mainBtn.TextColor3 = Color3.fromRGB(230,190,255)
 mainBtn.TextSize = 24
@@ -747,123 +738,95 @@ grad.Color = ColorSequence.new({
 })
 grad.Rotation = 45
 
-local gradConn = RunService.RenderStepped:Connect(function(dt)
+RunService.RenderStepped:Connect(function(dt)
     if grad and grad.Parent then
         grad.Rotation = (grad.Rotation + dt * 30) % 360
     end
 end)
 
-local function MakeDraggableOpenUi(topbar, obj)
-    local dragging, dragInput, dragStart, startPos = false, nil, nil, nil
-    local holdingDrag, holdToken = false, 0
-    obj:SetAttribute("Locked", false)
-    local function Update(input)
-        if obj:GetAttribute("Locked") then return end
-        local delta = input.Position - dragStart
-        obj.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-    end
-    local function ToggleLock()
-        local newState = not obj:GetAttribute("Locked")
-        obj:SetAttribute("Locked", newState)
-        Notify(newState and "Locked" or "Unlocked", newState and "Закреплено" or "Можно двигать", "Info", nil, 2)
-    end
-    topbar.InputBegan:Connect(function(input)
-        if input.UserInputType ~= Enum.UserInputType.MouseButton1 and input.UserInputType ~= Enum.UserInputType.Touch then return end
-        dragging = not obj:GetAttribute("Locked")
-        holdingDrag = true
-        dragStart = input.Position
-        startPos = obj.Position
-        holdToken = holdToken + 1
-        local token = holdToken
-        task.delay(1, function()
-            if holdingDrag and token == holdToken then ToggleLock() end
-        end)
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then
-                dragging = false
-                holdingDrag = false
-            end
-        end)
-    end)
-    topbar.InputChanged:Connect(function(input)
-        if not dragStart then return end
-        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-            if (input.Position - dragStart).Magnitude > 6 then holdingDrag = false end
-            dragInput = input
+local dragging, dragInput, dragStart, startPos = false, nil, nil, nil
+local holdingDrag, holdToken = false, 0
+mainBtn:SetAttribute("Locked", false)
+
+mainBtn.InputBegan:Connect(function(input)
+    if input.UserInputType ~= Enum.UserInputType.MouseButton1 and input.UserInputType ~= Enum.UserInputType.Touch then return end
+    dragging = not mainBtn:GetAttribute("Locked")
+    holdingDrag = true
+    dragStart = input.Position
+    startPos = mainBtn.Position
+    holdToken = holdToken + 1
+    local token = holdToken
+    task.delay(1, function()
+        if holdingDrag and token == holdToken then
+            local newState = not mainBtn:GetAttribute("Locked")
+            mainBtn:SetAttribute("Locked", newState)
+            Notify(newState and "Locked" or "Unlocked", newState and "Закреплено" or "Можно двигать", "Info", nil, 2)
         end
     end)
-    UserInputService.InputChanged:Connect(function(input)
-        if input == dragInput and dragging then Update(input) end
+    input.Changed:Connect(function()
+        if input.UserInputState == Enum.UserInputState.End then
+            dragging = false
+            holdingDrag = false
+        end
     end)
-end
+end)
 
-MakeDraggableOpenUi(mainBtn, mainBtn)
+mainBtn.InputChanged:Connect(function(input)
+    if not dragStart then return end
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        if (input.Position - dragStart).Magnitude > 6 then holdingDrag = false end
+        dragInput = input
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        if mainBtn:GetAttribute("Locked") then return end
+        local delta = input.Position - dragStart
+        mainBtn.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
 
 local uiOpen = true
 
 local function PlaySound(soundId)
-    local sound = Instance.new("Sound")
-    pcall(function() sound.SoundId = "rbxassetid://" .. soundId end)
-    sound.Parent = game:GetService("SoundService")
-    pcall(function() sound:Play() end)
-    sound.Ended:Connect(function() sound:Destroy() end)
-end
-
-local function OpenAnimation()
-    local originalSize = mainBtn.Size
-    local originalPos = mainBtn.Position
-    TweenService:Create(mainBtn, TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-        Size = UDim2.new(0, 80, 0, 80)
-    }):Play()
-    task.wait(0.08)
-    TweenService:Create(mainBtn, TweenInfo.new(0.15, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-        Size = originalSize
-    }):Play()
-end
-
-local function WindowAnimation()
-    local win = Window
     pcall(function()
-        if win and win.Root then
-            local root = win.Root
-            local originalSize = root.Size
-            root.Size = UDim2.new(0, 0, 0, 0)
-            TweenService:Create(root, TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
-                Size = originalSize
-            }):Play()
-        end
+        local sound = Instance.new("Sound")
+        sound.SoundId = "rbxassetid://" .. soundId
+        sound.Parent = SoundService
+        sound:Play()
+        sound.Ended:Connect(function() sound:Destroy() end)
     end)
 end
 
 mainBtn.MouseButton1Click:Connect(function()
-    local sounds = {"7127123605","438666542"}
-    pcall(function() PlaySound(sounds[math.random(#sounds)]) end)
+    PlaySound(({"7127123605","438666542"})[math.random(2)])
     uiOpen = not uiOpen
     if uiOpen then
-        Window:Show()
-        WindowAnimation()
+        pcall(function() Window:Show() end)
     else
-        Window:Hide()
+        pcall(function() Window:Hide() end)
     end
-    OpenAnimation()
+    local orig = UDim2.new(0, 60, 0, 60)
+    pcall(function()
+        TweenService:Create(mainBtn, TweenInfo.new(0.08, Enum.EasingStyle.Quad), {Size = UDim2.new(0, 80, 0, 80)}):Play()
+    end)
+    task.wait(0.08)
+    pcall(function()
+        TweenService:Create(mainBtn, TweenInfo.new(0.15, Enum.EasingStyle.Back), {Size = orig}):Play()
+    end)
 end)
 
-local oldChar
 local function bindChar(char)
     if not char then return end
     task.wait(0.6)
     applySpeed()
-    if state.flyEnabled and not state.flyConn then startFly() end
-    if state.noclip and not state.noclipConn then startNoClip() end
+    if state.flyEnabled then startFly() end
+    if state.noclip then startNoClip() end
 end
 
 LocalPlayer.CharacterAdded:Connect(bindChar)
 if LocalPlayer.Character then bindChar(LocalPlayer.Character) end
 
-task.delay(0.5, function()
-    pcall(function()
-        if Window and type(Window.SelectTab) == "function" then
-            Window:SelectTab(1)
-        end
-    end)
-end)
+Notify("Hiruku Lua", "Меню загружено", "Success", "solar/planet-bold", 4)
+task.delay(0.5, function() pcall(function() Window:SelectTab(1) end) end)
