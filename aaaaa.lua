@@ -9,7 +9,17 @@ local LocalPlayer = Players.LocalPlayer
 local VirtualUser = game:GetService("VirtualUser")
 
 local function Notify(title, content, ntype, icon, duration)
-    Fluent:Notify({ Title = title, Content = content, Type = ntype or "Info", Icon = icon, Duration = duration or 3 })
+    if Fluent and type(Fluent.Notify) == "function" then
+        pcall(function()
+            Fluent:Notify({
+                Title = title,
+                Content = content,
+                Type = ntype or "Info",
+                Icon = icon,
+                Duration = duration or 3
+            })
+        end)
+    end
 end
 
 local ANIME_BG = "rbxassetid://133541508207801"
@@ -135,7 +145,13 @@ local Window = Fluent:CreateWindow({
     UserInfoColor = Color3.fromRGB(185,70,255),
 })
 
-Fluent:SetErrorHandler(function(msg) pcall(function() Notify("Error", tostring(msg), "Error", nil, 5) end) end)
+if Fluent and type(Fluent.SetErrorHandler) == "function" then
+    pcall(function()
+        Fluent:SetErrorHandler(function(msg)
+            Notify("Error", tostring(msg), "Error", nil, 5)
+        end)
+    end)
+end
 
 local Tabs = {
     Info = Window:AddTab({ Title = "Info", Icon = "solar/info-circle-bold" }),
@@ -862,4 +878,10 @@ LocalPlayer.CharacterAdded:Connect(bindChar)
 if LocalPlayer.Character then bindChar(LocalPlayer.Character) end
 
 Notify("Hiruku Lua","Меню загружено","Success","solar/planet-bold",4)
-task.delay(0.5, function() Window:SelectTab(1) end)
+task.delay(0.5, function()
+    pcall(function()
+        if Window and type(Window.SelectTab) == "function" then
+            Window:SelectTab(1)
+        end
+    end)
+end)
