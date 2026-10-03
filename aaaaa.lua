@@ -9,17 +9,6 @@ local LocalPlayer = Players.LocalPlayer
 local VirtualUser = game:GetService("VirtualUser")
 
 local function Notify(title, content, ntype, icon, duration)
-    if Fluent and type(Fluent.Notify) == "function" then
-        pcall(function()
-            Fluent:Notify({
-                Title = title,
-                Content = content,
-                Type = ntype or "Info",
-                Icon = icon,
-                Duration = duration or 3
-            })
-        end)
-    end
 end
 
 local ANIME_BG = "rbxassetid://133541508207801"
@@ -145,13 +134,7 @@ local Window = Fluent:CreateWindow({
     UserInfoColor = Color3.fromRGB(185,70,255),
 })
 
-if Fluent and type(Fluent.SetErrorHandler) == "function" then
-    pcall(function()
-        Fluent:SetErrorHandler(function(msg)
-            Notify("Error", tostring(msg), "Error", nil, 5)
-        end)
-    end)
-end
+
 
 local Tabs = {
     Info = Window:AddTab({ Title = "Info", Icon = "solar/info-circle-bold" }),
@@ -720,14 +703,14 @@ secMisc:AddButton({
     end
 })
 
-secSet:AddButton({ Title = "Theme: HirukuViolet", Icon = "solar/palette-bold", Callback = function() Fluent:SetTheme("HirukuViolet") Notify("Theme","HirukuViolet","Success",nil,2) end })
+secSet:AddButton({ Title = "Theme: HirukuViolet", Icon = "solar/palette-bold", Callback = function() pcall(function() Fluent:SetTheme("HirukuViolet") end) Notify("Theme","HirukuViolet","Success",nil,2) end })
 secSet:AddButton({ Title = "Theme: NeonBlue", Icon = "solar/star-bold", Callback = function() Fluent:SetTheme("NeonBlue") Notify("Theme","NeonBlue","Success",nil,2) end })
 secSet:AddButton({ Title = "Theme: EmeraldDark", Icon = "solar/leaf-bold", Callback = function() Fluent:SetTheme("EmeraldDark") Notify("Theme","EmeraldDark","Success",nil,2) end })
 secSet:AddButton({ Title = "Theme: Sunset", Icon = "solar/sun-bold", Callback = function() Fluent:SetTheme("Sunset") Notify("Theme","Sunset","Success",nil,2) end })
 secSet:AddButton({ Title = "Theme: SlateStatic", Icon = "solar/pause-circle-bold", Callback = function() Fluent:SetTheme("SlateStatic") Notify("Theme","SlateStatic","Success",nil,2) end })
 secSet:AddButton({ Title = "Theme: SlateAnimated", Icon = "solar/play-circle-bold", Callback = function() Fluent:SetTheme("SlateAnimated") Notify("Theme","SlateAnimated","Success",nil,2) end })
 
-Fluent:SetTheme("HirukuViolet")
+pcall(function() Fluent:SetTheme("HirukuViolet") end)
 
 local toggleGui = Instance.new("ScreenGui")
 toggleGui.Name = "HirukuOpenUi"
@@ -854,7 +837,7 @@ end
 
 mainBtn.MouseButton1Click:Connect(function()
     local sounds = {"7127123605","438666542"}
-    PlaySound(sounds[math.random(#sounds)])
+    pcall(function() PlaySound(sounds[math.random(#sounds)]) end)
     uiOpen = not uiOpen
     if uiOpen then
         Window:Show()
@@ -877,7 +860,6 @@ end
 LocalPlayer.CharacterAdded:Connect(bindChar)
 if LocalPlayer.Character then bindChar(LocalPlayer.Character) end
 
-Notify("Hiruku Lua","Меню загружено","Success","solar/planet-bold",4)
 task.delay(0.5, function()
     pcall(function()
         if Window and type(Window.SelectTab) == "function" then
