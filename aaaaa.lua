@@ -27,98 +27,25 @@ local ANIME_BG = "rbxassetid://133541508207801"
 
 local THEMES = {
     HirukuViolet = {
-        Accent = Color3.fromRGB(150,35,235),
-        AcrylicMain = Color3.fromRGB(15,6,28),
+        Accent = Color3.fromRGB(150,35,235), AcrylicMain = Color3.fromRGB(15,6,28),
         AcrylicBorder = Color3.fromRGB(130,48,225),
-        AcrylicGradient = ColorSequence.new({
-            ColorSequenceKeypoint.new(0, Color3.fromRGB(32,13,58)),
-            ColorSequenceKeypoint.new(.55, Color3.fromRGB(19,8,38)),
-            ColorSequenceKeypoint.new(1, Color3.fromRGB(10,4,20))
-        }),
-        AcrylicNoise = .6, TitleBarLine = Color3.fromRGB(190,85,255),
-        Tab = Color3.fromRGB(27,11,48), Element = Color3.fromRGB(38,16,66),
-        ElementBorder = Color3.fromRGB(100,36,180), InElementBorder = Color3.fromRGB(150,35,235),
-        ElementTransparency = .86, ToggleSlider = Color3.fromRGB(46,22,78),
-        ToggleToggled = Color3.fromRGB(190,85,255), SliderRail = Color3.fromRGB(46,22,78),
-        Text = Color3.fromRGB(245,236,255), SubText = Color3.fromRGB(198,168,235),
-        IconColor = Color3.fromRGB(226,190,255), Hover = Color3.fromRGB(48,21,84),
-        HoverChange = .05, ShineEnabled = true,
-        Shine = { Speed = .5, RotationSpeed = 24, ColorSequence = ColorSequence.new({
-            ColorSequenceKeypoint.new(0, Color3.fromRGB(38,8,92)),
-            ColorSequenceKeypoint.new(.5, Color3.fromRGB(255,60,196)),
-            ColorSequenceKeypoint.new(1, Color3.fromRGB(38,8,92))
-        })},
+        AcrylicGradient = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromRGB(32,13,58)), ColorSequenceKeypoint.new(.55, Color3.fromRGB(19,8,38)), ColorSequenceKeypoint.new(1, Color3.fromRGB(10,4,20))}),
+        AcrylicNoise = .6, TitleBarLine = Color3.fromRGB(190,85,255), Tab = Color3.fromRGB(27,11,48),
+        Element = Color3.fromRGB(38,16,66), ElementBorder = Color3.fromRGB(100,36,180),
+        InElementBorder = Color3.fromRGB(150,35,235), ElementTransparency = .86,
+        ToggleSlider = Color3.fromRGB(46,22,78), ToggleToggled = Color3.fromRGB(190,85,255),
+        SliderRail = Color3.fromRGB(46,22,78), Text = Color3.fromRGB(245,236,255),
+        SubText = Color3.fromRGB(198,168,235), IconColor = Color3.fromRGB(226,190,255),
+        Hover = Color3.fromRGB(48,21,84), HoverChange = .05, ShineEnabled = true,
+        Shine = { Speed = .5, RotationSpeed = 24, ColorSequence = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromRGB(38,8,92)), ColorSequenceKeypoint.new(.5, Color3.fromRGB(255,60,196)), ColorSequenceKeypoint.new(1, Color3.fromRGB(38,8,92))})},
         StrokeShine = true, StrokeDark = Color3.fromRGB(70,20,135),
-        ButtonGradient = {
-            Background = ColorSequence.new({
-                ColorSequenceKeypoint.new(0, Color3.fromRGB(150,35,235)),
-                ColorSequenceKeypoint.new(.5, Color3.fromRGB(110,22,195)),
-                ColorSequenceKeypoint.new(1, Color3.fromRGB(48,10,105))
-            }),
-            Stroke = ColorSequence.new({
-                ColorSequenceKeypoint.new(0, Color3.fromRGB(150,35,235)),
-                ColorSequenceKeypoint.new(.5, Color3.fromRGB(255,60,196)),
-                ColorSequenceKeypoint.new(1, Color3.fromRGB(150,35,235))
-            })
-        }
+        ButtonGradient = { Background = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromRGB(150,35,235)), ColorSequenceKeypoint.new(.5, Color3.fromRGB(110,22,195)), ColorSequenceKeypoint.new(1, Color3.fromRGB(48,10,105))}), Stroke = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromRGB(150,35,235)), ColorSequenceKeypoint.new(.5, Color3.fromRGB(255,60,196)), ColorSequenceKeypoint.new(1, Color3.fromRGB(150,35,235))}) }
     },
-    NeonBlue = {
-        Accent = Color3.fromRGB(0,180,255), AcrylicMain = Color3.fromRGB(10,14,28),
-        AcrylicBorder = Color3.fromRGB(0,100,180),
-        AcrylicGradient = ColorSequence.new(Color3.fromRGB(10,14,28), Color3.fromRGB(5,8,20)),
-        TitleBarLine = Color3.fromRGB(0,100,180), Tab = Color3.fromRGB(15,22,48),
-        Element = Color3.fromRGB(12,18,40), ElementBorder = Color3.fromRGB(0,80,160),
-        InElementBorder = Color3.fromRGB(0,120,220), ToggleSlider = Color3.fromRGB(20,30,70),
-        ToggleToggled = Color3.fromRGB(0,180,255), Text = Color3.fromRGB(230,245,255),
-        SubText = Color3.fromRGB(120,170,220), Hover = Color3.fromRGB(20,36,80)
-    },
-    EmeraldDark = {
-        Accent = Color3.fromRGB(0,220,120), AcrylicMain = Color3.fromRGB(8,20,14),
-        AcrylicBorder = Color3.fromRGB(0,140,70),
-        AcrylicGradient = ColorSequence.new(Color3.fromRGB(8,20,14), Color3.fromRGB(4,12,8)),
-        TitleBarLine = Color3.fromRGB(0,140,70), Tab = Color3.fromRGB(10,28,18),
-        Element = Color3.fromRGB(8,22,14), ElementBorder = Color3.fromRGB(0,110,55),
-        InElementBorder = Color3.fromRGB(0,180,90), ToggleSlider = Color3.fromRGB(14,40,24),
-        ToggleToggled = Color3.fromRGB(0,220,120), Text = Color3.fromRGB(220,255,235),
-        SubText = Color3.fromRGB(120,200,155), Hover = Color3.fromRGB(14,42,26)
-    },
-    Sunset = {
-        Accent = Color3.fromRGB(255,110,50), AcrylicMain = Color3.fromRGB(28,16,12),
-        AcrylicBorder = Color3.fromRGB(180,80,30),
-        AcrylicGradient = ColorSequence.new(Color3.fromRGB(28,16,12), Color3.fromRGB(14,8,6)),
-        TitleBarLine = Color3.fromRGB(180,80,30), Tab = Color3.fromRGB(36,22,16),
-        Element = Color3.fromRGB(30,18,13), ElementBorder = Color3.fromRGB(160,70,25),
-        InElementBorder = Color3.fromRGB(220,100,45), ToggleSlider = Color3.fromRGB(50,30,20),
-        ToggleToggled = Color3.fromRGB(255,110,50), Text = Color3.fromRGB(255,240,230),
-        SubText = Color3.fromRGB(220,170,145), Hover = Color3.fromRGB(56,34,24)
-    },
-    SlateStatic = {
-        Accent = Color3.fromRGB(140,150,165), AcrylicMain = Color3.fromRGB(22,24,28),
-        AcrylicBorder = Color3.fromRGB(70,75,85),
-        AcrylicGradient = ColorSequence.new(Color3.fromRGB(22,24,28), Color3.fromRGB(14,15,18)),
-        TitleBarLine = Color3.fromRGB(70,75,85), Tab = Color3.fromRGB(28,30,35),
-        Element = Color3.fromRGB(24,26,30), ElementBorder = Color3.fromRGB(60,64,72),
-        InElementBorder = Color3.fromRGB(90,96,108), ToggleSlider = Color3.fromRGB(40,43,48),
-        ToggleToggled = Color3.fromRGB(140,150,165), Text = Color3.fromRGB(235,237,240),
-        SubText = Color3.fromRGB(150,155,165), Hover = Color3.fromRGB(34,37,42)
-    },
-    SlateAnimated = {
-        Accent = Color3.fromRGB(140,150,165), AcrylicMain = Color3.fromRGB(22,24,28),
-        AcrylicBorder = Color3.fromRGB(70,75,85),
-        AcrylicGradient = ColorSequence.new(Color3.fromRGB(22,24,28), Color3.fromRGB(14,15,18)),
-        TitleBarLine = Color3.fromRGB(70,75,85), Tab = Color3.fromRGB(28,30,35),
-        Element = Color3.fromRGB(24,26,30), ElementBorder = Color3.fromRGB(60,64,72),
-        InElementBorder = Color3.fromRGB(90,96,108), ToggleSlider = Color3.fromRGB(40,43,48),
-        ToggleToggled = Color3.fromRGB(140,150,165), Text = Color3.fromRGB(235,237,240),
-        SubText = Color3.fromRGB(150,155,165), Hover = Color3.fromRGB(34,37,42),
-        ShineEnabled = true,
-        Shine = { Speed = .5, RotationSpeed = 25, ColorSequence = ColorSequence.new({
-            ColorSequenceKeypoint.new(0, Color3.fromRGB(50,54,62)),
-            ColorSequenceKeypoint.new(.5, Color3.fromRGB(140,150,165)),
-            ColorSequenceKeypoint.new(1, Color3.fromRGB(50,54,62))
-        })},
-        StrokeShine = true, StrokeDark = Color3.fromRGB(50,54,62)
-    }
+    NeonBlue = { Accent = Color3.fromRGB(0,180,255), AcrylicMain = Color3.fromRGB(10,14,28), AcrylicBorder = Color3.fromRGB(0,100,180), AcrylicGradient = ColorSequence.new(Color3.fromRGB(10,14,28), Color3.fromRGB(5,8,20)), TitleBarLine = Color3.fromRGB(0,100,180), Tab = Color3.fromRGB(15,22,48), Element = Color3.fromRGB(12,18,40), ElementBorder = Color3.fromRGB(0,80,160), InElementBorder = Color3.fromRGB(0,120,220), ToggleSlider = Color3.fromRGB(20,30,70), ToggleToggled = Color3.fromRGB(0,180,255), Text = Color3.fromRGB(230,245,255), SubText = Color3.fromRGB(120,170,220), Hover = Color3.fromRGB(20,36,80) },
+    EmeraldDark = { Accent = Color3.fromRGB(0,220,120), AcrylicMain = Color3.fromRGB(8,20,14), AcrylicBorder = Color3.fromRGB(0,140,70), AcrylicGradient = ColorSequence.new(Color3.fromRGB(8,20,14), Color3.fromRGB(4,12,8)), TitleBarLine = Color3.fromRGB(0,140,70), Tab = Color3.fromRGB(10,28,18), Element = Color3.fromRGB(8,22,14), ElementBorder = Color3.fromRGB(0,110,55), InElementBorder = Color3.fromRGB(0,180,90), ToggleSlider = Color3.fromRGB(14,40,24), ToggleToggled = Color3.fromRGB(0,220,120), Text = Color3.fromRGB(220,255,235), SubText = Color3.fromRGB(120,200,155), Hover = Color3.fromRGB(14,42,26) },
+    Sunset = { Accent = Color3.fromRGB(255,110,50), AcrylicMain = Color3.fromRGB(28,16,12), AcrylicBorder = Color3.fromRGB(180,80,30), AcrylicGradient = ColorSequence.new(Color3.fromRGB(28,16,12), Color3.fromRGB(14,8,6)), TitleBarLine = Color3.fromRGB(180,80,30), Tab = Color3.fromRGB(36,22,16), Element = Color3.fromRGB(30,18,13), ElementBorder = Color3.fromRGB(160,70,25), InElementBorder = Color3.fromRGB(220,100,45), ToggleSlider = Color3.fromRGB(50,30,20), ToggleToggled = Color3.fromRGB(255,110,50), Text = Color3.fromRGB(255,240,230), SubText = Color3.fromRGB(220,170,145), Hover = Color3.fromRGB(56,34,24) },
+    SlateStatic = { Accent = Color3.fromRGB(140,150,165), AcrylicMain = Color3.fromRGB(22,24,28), AcrylicBorder = Color3.fromRGB(70,75,85), AcrylicGradient = ColorSequence.new(Color3.fromRGB(22,24,28), Color3.fromRGB(14,15,18)), TitleBarLine = Color3.fromRGB(70,75,85), Tab = Color3.fromRGB(28,30,35), Element = Color3.fromRGB(24,26,30), ElementBorder = Color3.fromRGB(60,64,72), InElementBorder = Color3.fromRGB(90,96,108), ToggleSlider = Color3.fromRGB(40,43,48), ToggleToggled = Color3.fromRGB(140,150,165), Text = Color3.fromRGB(235,237,240), SubText = Color3.fromRGB(150,155,165), Hover = Color3.fromRGB(34,37,42) },
+    SlateAnimated = { Accent = Color3.fromRGB(140,150,165), AcrylicMain = Color3.fromRGB(22,24,28), AcrylicBorder = Color3.fromRGB(70,75,85), AcrylicGradient = ColorSequence.new(Color3.fromRGB(22,24,28), Color3.fromRGB(14,15,18)), TitleBarLine = Color3.fromRGB(70,75,85), Tab = Color3.fromRGB(28,30,35), Element = Color3.fromRGB(24,26,30), ElementBorder = Color3.fromRGB(60,64,72), InElementBorder = Color3.fromRGB(90,96,108), ToggleSlider = Color3.fromRGB(40,43,48), ToggleToggled = Color3.fromRGB(140,150,165), Text = Color3.fromRGB(235,237,240), SubText = Color3.fromRGB(150,155,165), Hover = Color3.fromRGB(34,37,42), ShineEnabled = true, Shine = { Speed = .5, RotationSpeed = 25, ColorSequence = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromRGB(50,54,62)), ColorSequenceKeypoint.new(.5, Color3.fromRGB(140,150,165)), ColorSequenceKeypoint.new(1, Color3.fromRGB(50,54,62))})}, StrokeShine = true, StrokeDark = Color3.fromRGB(50,54,62) }
 }
 
 for name, theme in pairs(THEMES) do
@@ -130,25 +57,14 @@ for name, theme in pairs(THEMES) do
 end
 
 local Window = Fluent:CreateWindow({
-    Title = "HIRUKU LUA",
-    SubTitle = "Mog Evolution",
-    Version = "v1.2.0",
-    TabWidth = 130,
-    Size = UDim2.fromOffset(580,410),
-    Acrylic = true,
-    Theme = "HirukuViolet",
-    MinimizeKey = Enum.KeyCode.LeftControl,
-    Search = true,
-    Icons = "solar/planet-bold",
-    UserInfoTop = true,
-    UserInfoTitle = "Welcome",
-    UserInfoSubtitle = LocalPlayer.DisplayName,
-    UserInfoColor = Color3.fromRGB(185,70,255),
+    Title = "HIRUKU LUA", SubTitle = "Mog Evolution", Version = "v1.3.0",
+    TabWidth = 130, Size = UDim2.fromOffset(580,410), Acrylic = true,
+    Theme = "HirukuViolet", MinimizeKey = Enum.KeyCode.LeftControl, Search = true,
+    Icons = "solar/planet-bold", UserInfoTop = true, UserInfoTitle = "Welcome",
+    UserInfoSubtitle = LocalPlayer.DisplayName, UserInfoColor = Color3.fromRGB(185,70,255),
 })
 
-pcall(function()
-    Fluent:SetErrorHandler(function(msg) Notify("Error", tostring(msg), "Error", nil, 5) end)
-end)
+pcall(function() Fluent:SetErrorHandler(function(msg) Notify("Error", tostring(msg), "Error", nil, 5) end) end)
 
 local Tabs = {
     Farm = Window:AddTab({ Title = "Farm", Icon = "solar/box-minimalistic-bold" }),
@@ -158,28 +74,15 @@ local Tabs = {
 }
 
 local state = {
-    autoClick = false,
-    autoClickSpeed = 10,
-    autoClickConn = nil,
-    autoClickRemotes = {},
-    speedEnabled = false,
-    walkSpeed = 100,
-    jumpPower = 100,
-    flyEnabled = false,
-    flySpeed = 200,
-    flyConn = nil,
-    flyKeyConn = nil,
-    infiniteJump = false,
-    antiAFK = true,
-    autoRebirth = false,
-    autoRebirthConn = nil,
-    noclip = false,
-    noclipConn = nil,
-    autoClaimWins = false,
-    autoClaimConn = nil,
-    autoTeleportWins = false,
-    autoTeleportConn = nil,
-    winPoint = nil,
+    autoClick = false, autoClickSpeed = 10, autoClickConn = nil, autoClickRemotes = {},
+    speedEnabled = false, walkSpeed = 100, jumpPower = 100,
+    flyEnabled = false, flySpeed = 200, flyConn = nil,
+    infiniteJump = false, antiAFK = true,
+    autoRebirth = false, autoRebirthConn = nil,
+    noclip = false, noclipConn = nil,
+    autoClaimWins = false, autoClaimConn = nil,
+    autoTeleportWins = false, autoTeleportConn = nil,
+    currentWinPoint = nil, winPointCache = {},
     lastTeleport = 0,
 }
 
@@ -197,13 +100,97 @@ local function refreshClickRemotes()
     for _, obj in ipairs(ReplicatedStorage:GetDescendants()) do
         if obj:IsA("RemoteEvent") then
             local n = obj.Name:lower()
-            if n:find("click") or n:find("power") or n:find("tap") then
-                table.insert(remotes, obj)
-            end
+            if n:find("click") or n:find("power") or n:find("tap") then table.insert(remotes, obj) end
         end
     end
     state.autoClickRemotes = remotes
     return remotes
+end
+
+local function getPlayerLevel()
+    local ls = LocalPlayer:FindFirstChild("leaderstats")
+    if not ls then return nil end
+    for _, v in ipairs(ls:GetChildren()) do
+        local n = v.Name:lower()
+        if n == "level" or n == "lvl" or n == "stage" then return tonumber(v.Value) or 0 end
+    end
+    return nil
+end
+
+local function getPlayerWins()
+    local ls = LocalPlayer:FindFirstChild("leaderstats")
+    if ls then
+        for _, v in ipairs(ls:GetChildren()) do
+            local n = v.Name:lower()
+            if n == "wins" or n == "win" then return tonumber(v.Value) or 0 end
+        end
+    end
+    local pg = LocalPlayer:FindFirstChild("PlayerGui")
+    if pg then
+        for _, obj in ipairs(pg:GetDescendants()) do
+            if obj:IsA("TextLabel") and obj.Visible then
+                local n = obj.Name:lower()
+                if n:find("win") or n:find("victory") then
+                    local num = tonumber((obj.Text or ""):gsub("[^%d]", ""))
+                    if num and num > 0 then return num end
+                end
+            end
+        end
+    end
+    return 0
+end
+
+local function findWinPoints()
+    local points = {}
+    for _, obj in ipairs(workspace:GetDescendants()) do
+        if obj:IsA("BasePart") or obj:IsA("Model") then
+            local n = obj.Name:lower()
+            if n:find("win") or n:find("reward") or n:find("prize") then
+                local pos = nil
+                local stage = nil
+                if obj:IsA("BasePart") then
+                    pos = obj.Position
+                    stage = obj:GetAttribute("Stage") or obj:GetAttribute("Level")
+                else
+                    local pp = obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart")
+                    if pp then pos = pp.Position end
+                    stage = obj:GetAttribute("Stage") or obj:GetAttribute("Level") or (pp and pp:GetAttribute("Stage"))
+                end
+                if pos then
+                    local text = ""
+                    for _, d in ipairs(obj:GetDescendants()) do
+                        if d:IsA("TextLabel") or d:IsA("BillboardGui") then
+                            text = text .. " " .. (d.Text or "")
+                        end
+                    end
+                    table.insert(points, {obj = obj, pos = pos, stage = tonumber(stage) or 0, text = text, name = obj.Name})
+                end
+            end
+        end
+    end
+    return points
+end
+
+local function findBestWinPoint()
+    local points = findWinPoints()
+    if #points == 0 then return nil end
+    local level = getPlayerLevel()
+    local _, hrp = getChar()
+    local myPos = hrp and hrp.Position or Vector3.zero
+    if level then
+        local best = nil
+        local bestStage = -1
+        for _, p in ipairs(points) do
+            if p.stage > bestStage and p.stage <= level + 1 then
+                bestStage = p.stage
+                best = p
+            end
+        end
+        if best then return best end
+    end
+    local sorted = points
+    table.sort(sorted, function(a, b) return (a.pos - myPos).Magnitude < (b.pos - myPos).Magnitude end)
+    return sorted[1]
 end
 
 local function findWinButton()
@@ -213,11 +200,8 @@ local function findWinButton()
         if obj:IsA("TextButton") or obj:IsA("ImageButton") then
             local name = obj.Name:lower()
             local text = obj:IsA("TextButton") and (obj.Text or ""):lower() or ""
-            if (name:find("win") or name:find("claim") or name:find("reward") or
-                text:find("claim") or text:find("get") or text:find("500")) and obj.Visible then
-                if obj.AbsoluteSize.X > 20 and obj.AbsoluteSize.Y > 20 then
-                    return obj
-                end
+            if (name:find("win") or name:find("claim") or name:find("reward") or text:find("claim") or text:find("get")) and obj.Visible then
+                if obj.AbsoluteSize.X > 20 and obj.AbsoluteSize.Y > 20 then return obj end
             end
         end
     end
@@ -227,54 +211,20 @@ end
 local function fireButton(btn)
     if not btn then return false end
     local ok = false
-    pcall(function()
-        if firesignal and btn.Activated then
-            firesignal(btn.Activated)
-            ok = true
-        end
-    end)
-    pcall(function()
-        if firesignal and btn.MouseButton1Click then
-            firesignal(btn.MouseButton1Click)
-            ok = true
-        end
-    end)
+    pcall(function() if firesignal and btn.Activated then firesignal(btn.Activated) ok = true end end)
+    pcall(function() if firesignal and btn.MouseButton1Click then firesignal(btn.MouseButton1Click) ok = true end end)
     pcall(function()
         if getconnections then
-            for _, c in pairs(getconnections(btn.MouseButton1Click)) do
-                if c.Fire then c:Fire() ok = true end
-            end
-            for _, c in pairs(getconnections(btn.Activated)) do
-                if c.Fire then c:Fire() ok = true end
-            end
+            for _, c in pairs(getconnections(btn.MouseButton1Click)) do if c.Fire then c:Fire() ok = true end end
+            for _, c in pairs(getconnections(btn.Activated)) do if c.Fire then c:Fire() ok = true end end
         end
     end)
     return ok
 end
 
-local function findWinPoint()
-    if state.winPoint and state.winPoint.Parent then return state.winPoint end
-    local keywords = {"win", "reward", "prize", "claim"}
-    for _, obj in ipairs(workspace:GetDescendants()) do
-        if obj:IsA("BasePart") then
-            local n = obj.Name:lower()
-            for _, kw in ipairs(keywords) do
-                if n:find(kw) then
-                    state.winPoint = obj
-                    return obj
-                end
-            end
-        end
-    end
-    return nil
-end
-
 local function startAutoClick()
     local remotes = refreshClickRemotes()
-    if #remotes == 0 then
-        Notify("Auto Click", "Remote не найден", "Error", nil, 5)
-        return false
-    end
+    if #remotes == 0 then Notify("Auto Click", "Remote не найден", "Error", nil, 5) return false end
     state.autoClick = true
     local idx = 0
     state.autoClickConn = RunService.Heartbeat:Connect(function()
@@ -283,9 +233,7 @@ local function startAutoClick()
             idx = idx + 1
             if idx > #state.autoClickRemotes then idx = 1 end
             local r = state.autoClickRemotes[idx]
-            if r and r.Parent then
-                pcall(function() r:FireServer() end)
-            end
+            if r and r.Parent then pcall(function() r:FireServer() end) end
         end
     end)
     Notify("Auto Click", "Включён (" .. #remotes .. " remotes)", "Success", nil, 3)
@@ -308,10 +256,7 @@ local function startAutoClaimWins()
             if r:IsA("RemoteEvent") or r:IsA("RemoteFunction") then
                 local n = r.Name:lower()
                 if n:find("win") or n:find("reward") or n:find("claim") or n:find("prize") then
-                    pcall(function()
-                        if r:IsA("RemoteFunction") then r:InvokeServer()
-                        else r:FireServer() end
-                    end)
+                    pcall(function() if r:IsA("RemoteFunction") then r:InvokeServer() else r:FireServer() end end)
                 end
             end
         end
@@ -326,11 +271,9 @@ local function stopAutoClaimWins()
 end
 
 local function startAutoTeleportWins()
-    state.winPoint = findWinPoint()
-    if not state.winPoint then
-        Notify("Auto Teleport", "Точка побед не найдена", "Error", nil, 5)
-        return false
-    end
+    local point = findBestWinPoint()
+    if not point then Notify("Auto Teleport", "Win-точка не найдена", "Error", nil, 5) return false end
+    state.currentWinPoint = point
     state.autoTeleportWins = true
     state.autoTeleportConn = RunService.Heartbeat:Connect(function()
         if not state.autoTeleportWins then return end
@@ -339,12 +282,10 @@ local function startAutoTeleportWins()
         state.lastTeleport = now
         local _, hrp = getChar()
         if not hrp then return end
-        local wp = state.winPoint
-        if wp and wp.Parent then
-            hrp.CFrame = CFrame.new(wp.Position + Vector3.new(0,3,0))
-        end
+        local wp = state.currentWinPoint
+        if wp and wp.obj and wp.obj.Parent then hrp.CFrame = CFrame.new(wp.pos + Vector3.new(0,3,0)) end
     end)
-    Notify("Auto Teleport", "Включён к " .. state.winPoint.Name, "Success", nil, 3)
+    Notify("Auto Teleport", "Включён к " .. point.name .. " (Stage " .. point.stage .. ")", "Success", nil, 3)
     return true
 end
 
@@ -367,7 +308,6 @@ local function startFly()
     if not hrp or not hum then return end
     state.flyEnabled = true
     hum.PlatformStand = true
-
     local bv = hrp:FindFirstChild("HirukuFlyVel")
     if not bv then
         bv = Instance.new("BodyVelocity")
@@ -386,7 +326,6 @@ local function startFly()
         bg.CFrame = hrp.CFrame
         bg.Parent = hrp
     end
-
     if state.flyConn then state.flyConn:Disconnect() end
     state.flyConn = RunService.RenderStepped:Connect(function()
         if not state.flyEnabled then return end
@@ -407,7 +346,6 @@ local function startFly()
         bvv.Velocity = dir * state.flySpeed
         bgg.CFrame = CFrame.new(p.Position, p.Position + cam.CFrame.LookVector)
     end)
-
     Notify("Fly", "Включён", "Success", nil, 3)
 end
 
@@ -458,10 +396,7 @@ end)
 
 LocalPlayer.Idled:Connect(function()
     if not state.antiAFK then return end
-    pcall(function()
-        VirtualUser:CaptureController()
-        VirtualUser:ClickButton2(Vector2.new())
-    end)
+    pcall(function() VirtualUser:CaptureController() VirtualUser:ClickButton2(Vector2.new()) end)
 end)
 
 local secFarm = Tabs.Farm:AddSection("Auto Click", "solar/cursor-bold")
@@ -471,228 +406,125 @@ local secChar = Tabs.Character:AddSection("Movement", "solar/rocket-bold")
 local secTeleport = Tabs.Character:AddSection("Teleport", "solar/map-point-bold")
 local secMisc = Tabs.Misc:AddSection("System", "solar/widget-bold")
 local secSet = Tabs.Settings:AddSection("Theme", "solar/palette-bold")
+local secFont = Tabs.Settings:AddSection("Font", "solar/text-bold")
 
-secFarm:AddToggle("AutoClick", {
-    Title = "Auto Click",
-    Description = "Спамит все клик-ремоты",
-    Icon = "solar/cursor-bold",
-    Default = false,
-    Callback = function(v) if v then startAutoClick() else stopAutoClick() end end
-})
+local FONT_LIST = {"Gotham", "GothamBold", "SourceSans", "SourceSansBold", "Code", "Roboto", "RobotoCondensed", "Ubuntu", "Arial", "Antique", "Fantasy", "SciFi", "Cartoon"}
 
-secFarm:AddSlider("ClickSpeed", {
-    Title = "Clicks Per Frame",
-    Icon = "solar/speedometer-bold",
-    Min = 1, Max = 50, Default = 10, Rounding = 0,
-    Callback = function(v) state.autoClickSpeed = v end
-})
+local function applyFont(fontName)
+    local pg = LocalPlayer:FindFirstChild("PlayerGui")
+    if not pg then return end
+    for _, obj in ipairs(pg:GetDescendants()) do
+        if obj:IsA("TextLabel") or obj:IsA("TextButton") or obj:IsA("TextBox") then
+            pcall(function() obj.Font = Enum.Font[fontName] end)
+        end
+    end
+    Notify("Font", "Применён: " .. fontName, "Success", nil, 2)
+end
 
-secWin:AddToggle("AutoClaimWins", {
-    Title = "Auto Claim Wins",
-    Description = "Автоматически жмёт кнопку получения побед",
-    Icon = "solar/medal-star-bold",
-    Default = false,
-    Callback = function(v) if v then startAutoClaimWins() else stopAutoClaimWins() end end
-})
+secFarm:AddToggle("AutoClick", { Title = "Auto Click", Description = "Спамит все клик-ремоты", Icon = "solar/cursor-bold", Default = false, Callback = function(v) if v then startAutoClick() else stopAutoClick() end end })
+secFarm:AddSlider("ClickSpeed", { Title = "Clicks Per Frame", Icon = "solar/speedometer-bold", Min = 1, Max = 50, Default = 10, Rounding = 0, Callback = function(v) state.autoClickSpeed = v end })
 
-secWin:AddToggle("AutoTeleportWins", {
-    Title = "Auto Teleport to Win Point",
-    Description = "Телепортирует к точке получения побед",
-    Icon = "solar/map-point-bold",
-    Default = false,
-    Callback = function(v) if v then startAutoTeleportWins() else stopAutoTeleportWins() end end
+secWin:AddToggle("AutoClaimWins", { Title = "Auto Claim Wins", Description = "Автоматически жмёт кнопку получения побед", Icon = "solar/medal-star-bold", Default = false, Callback = function(v) if v then startAutoClaimWins() else stopAutoClaimWins() end end })
+secWin:AddToggle("AutoTeleportWins", { Title = "Auto Teleport to Win Point", Description = "Телепортирует к Win-точке под твой текущий этап", Icon = "solar/map-point-bold", Default = false, Callback = function(v) if v then startAutoTeleportWins() else stopAutoTeleportWins() end end })
+
+secWin:AddButton({
+    Title = "Refresh Win Point",
+    Description = "Переищет лучшую Win-точку под твой текущий этап",
+    Icon = "solar/refresh-bold",
+    Callback = function()
+        local point = findBestWinPoint()
+        if point then
+            state.currentWinPoint = point
+            Notify("Win Point", "Найдена: " .. point.name .. " (Stage " .. point.stage .. ")", "Success", nil, 3)
+        else
+            Notify("Win Point", "Ничего не найдено", "Error", nil, 3)
+        end
+    end
 })
 
 secWin:AddButton({
-    Title = "Force Claim 500 Wins",
-    Description = "Пробует отправить серверу запрос на 500 побед",
-    Icon = "solar/medal-star-bold",
+    Title = "Show All Win Points",
+    Description = "Выводит в консоль все Win-точки и их этапы",
+    Icon = "solar/list-bold",
     Callback = function()
-        local count = 0
-        for _, r in ipairs(ReplicatedStorage:GetDescendants()) do
-            if r:IsA("RemoteEvent") or r:IsA("RemoteFunction") then
-                local n = r.Name:lower()
-                if n:find("win") or n:find("reward") or n:find("claim") or n:find("prize") then
-                    pcall(function()
-                        if r:IsA("RemoteFunction") then r:InvokeServer(500)
-                        else r:FireServer(500) end
-                    end)
-                    pcall(function()
-                        if r:IsA("RemoteFunction") then r:InvokeServer()
-                        else r:FireServer() end
-                    end)
-                    count = count + 1
-                end
-            end
+        local points = findWinPoints()
+        print("=== Win Points (" .. #points .. ") ===")
+        for i, p in ipairs(points) do
+            print(i, p.name, "Stage:", p.stage, "Pos:", tostring(p.pos))
         end
-        Notify("Force Claim", "Отправлено " .. count .. " запросов", "Success", nil, 3)
+        Notify("Win Points", "Найдено " .. #points .. " (см. консоль)", "Info", nil, 3)
     end
 })
 
-secRebirth:AddToggle("AutoRebirth", {
-    Title = "Auto Rebirth",
-    Description = "Автоматически перерождается",
-    Icon = "solar/refresh-bold",
-    Default = false,
-    Callback = function(v)
-        state.autoRebirth = v
-        if state.autoRebirthConn then state.autoRebirthConn:Disconnect() state.autoRebirthConn = nil end
-        if v then
-            state.autoRebirthConn = RunService.Heartbeat:Connect(function()
-                if not state.autoRebirth then return end
-                for _, r in ipairs(ReplicatedStorage:GetDescendants()) do
-                    if r:IsA("RemoteEvent") or r:IsA("RemoteFunction") then
-                        local n = r.Name:lower()
-                        if n:find("rebirth") or n:find("ascend") or n:find("prestige") then
-                            pcall(function()
-                                if r:IsA("RemoteFunction") then r:InvokeServer()
-                                else r:FireServer() end
-                            end)
-                        end
+secRebirth:AddToggle("AutoRebirth", { Title = "Auto Rebirth", Description = "Автоматически перерождается", Icon = "solar/refresh-bold", Default = false, Callback = function(v)
+    state.autoRebirth = v
+    if state.autoRebirthConn then state.autoRebirthConn:Disconnect() state.autoRebirthConn = nil end
+    if v then
+        state.autoRebirthConn = RunService.Heartbeat:Connect(function()
+            if not state.autoRebirth then return end
+            for _, r in ipairs(ReplicatedStorage:GetDescendants()) do
+                if r:IsA("RemoteEvent") or r:IsA("RemoteFunction") then
+                    local n = r.Name:lower()
+                    if n:find("rebirth") or n:find("ascend") or n:find("prestige") then
+                        pcall(function() if r:IsA("RemoteFunction") then r:InvokeServer() else r:FireServer() end end)
                     end
                 end
-                local pg = LocalPlayer:FindFirstChild("PlayerGui")
-                if pg then
-                    for _, obj in ipairs(pg:GetDescendants()) do
-                        if (obj:IsA("TextButton") or obj:IsA("ImageButton")) and obj.Visible then
-                            local text = obj:IsA("TextButton") and (obj.Text or ""):lower() or ""
-                            if text:find("rebirth") or text:find("ascend") or obj.Name:lower():find("rebirth") then
-                                fireButton(obj)
-                            end
-                        end
+            end
+            local pg = LocalPlayer:FindFirstChild("PlayerGui")
+            if pg then
+                for _, obj in ipairs(pg:GetDescendants()) do
+                    if (obj:IsA("TextButton") or obj:IsA("ImageButton")) and obj.Visible then
+                        local text = obj:IsA("TextButton") and (obj.Text or ""):lower() or ""
+                        if text:find("rebirth") or text:find("ascend") or obj.Name:lower():find("rebirth") then fireButton(obj) end
                     end
                 end
-            end)
-        end
-    end
-})
-
-secChar:AddToggle("Speed", {
-    Title = "Speed Hack",
-    Icon = "solar/running-bold",
-    Default = false,
-    Callback = function(v) state.speedEnabled = v applySpeed() end
-})
-
-secChar:AddSlider("WalkSpeed", {
-    Title = "Walk Speed",
-    Icon = "solar/speedometer-bold",
-    Min = 16, Max = 500, Default = 100, Rounding = 0,
-    Callback = function(v) state.walkSpeed = v applySpeed() end
-})
-
-secChar:AddSlider("JumpPower", {
-    Title = "Jump Power",
-    Icon = "solar/arrow-up-bold",
-    Min = 50, Max = 500, Default = 100, Rounding = 0,
-    Callback = function(v) state.jumpPower = v applySpeed() end
-})
-
-secChar:AddToggle("Fly", {
-    Title = "Fly",
-    Description = "WASD летит, Space вверх, LeftCtrl вниз",
-    Icon = "solar/plain-2-bold",
-    Default = false,
-    Callback = function(v) if v then startFly() else stopFly() end end
-})
-
-secChar:AddSlider("FlySpeed", {
-    Title = "Fly Speed",
-    Icon = "solar/speedometer-bold",
-    Min = 50, Max = 1000, Default = 200, Rounding = 0,
-    Callback = function(v) state.flySpeed = v end
-})
-
-secChar:AddToggle("InfJump", {
-    Title = "Infinite Jump",
-    Icon = "solar/arrow-up-bold",
-    Default = false,
-    Callback = function(v) state.infiniteJump = v end
-})
-
-secChar:AddToggle("NoClip", {
-    Title = "No Clip",
-    Icon = "solar/ghost-bold",
-    Default = false,
-    Callback = function(v) if v then startNoClip() else stopNoClip() end end
-})
-
-secTeleport:AddButton({
-    Title = "Teleport to Win Point",
-    Icon = "solar/map-point-bold",
-    Callback = function()
-        local wp = findWinPoint()
-        if wp then
-            local _, hrp = getChar()
-            if hrp then
-                hrp.CFrame = CFrame.new(wp.Position + Vector3.new(0,3,0))
-                Notify("Teleport", "К " .. wp.Name, "Success", nil, 2)
             end
-        else
-            Notify("Teleport", "Точка не найдена", "Error", nil, 3)
-        end
+        end)
     end
-})
+end })
 
-secTeleport:AddButton({
-    Title = "Teleport to Spawn",
-    Icon = "solar/home-bold",
-    Callback = function()
+secChar:AddToggle("Speed", { Title = "Speed Hack", Icon = "solar/running-bold", Default = false, Callback = function(v) state.speedEnabled = v applySpeed() end })
+secChar:AddSlider("WalkSpeed", { Title = "Walk Speed", Icon = "solar/speedometer-bold", Min = 16, Max = 500, Default = 100, Rounding = 0, Callback = function(v) state.walkSpeed = v applySpeed() end })
+secChar:AddSlider("JumpPower", { Title = "Jump Power", Icon = "solar/arrow-up-bold", Min = 50, Max = 500, Default = 100, Rounding = 0, Callback = function(v) state.jumpPower = v applySpeed() end })
+secChar:AddToggle("Fly", { Title = "Fly", Description = "WASD летит, Space вверх, LeftCtrl вниз", Icon = "solar/plain-2-bold", Default = false, Callback = function(v) if v then startFly() else stopFly() end end })
+secChar:AddSlider("FlySpeed", { Title = "Fly Speed", Icon = "solar/speedometer-bold", Min = 50, Max = 1000, Default = 200, Rounding = 0, Callback = function(v) state.flySpeed = v end })
+secChar:AddToggle("InfJump", { Title = "Infinite Jump", Icon = "solar/arrow-up-bold", Default = false, Callback = function(v) state.infiniteJump = v end })
+secChar:AddToggle("NoClip", { Title = "No Clip", Icon = "solar/ghost-bold", Default = false, Callback = function(v) if v then startNoClip() else stopNoClip() end end })
+
+secTeleport:AddButton({ Title = "Teleport to Win Point", Icon = "solar/map-point-bold", Callback = function()
+    local point = findBestWinPoint()
+    if point then
         local _, hrp = getChar()
-        if hrp then
-            local spawn = workspace:FindFirstChildOfClass("SpawnLocation")
-            if spawn then
-                hrp.CFrame = CFrame.new(spawn.Position + Vector3.new(0,3,0))
-                Notify("Teleport", "К спавну", "Success", nil, 2)
+        if hrp then hrp.CFrame = CFrame.new(point.pos + Vector3.new(0,3,0)) Notify("Teleport", "К " .. point.name, "Success", nil, 2) end
+    else
+        Notify("Teleport", "Точка не найдена", "Error", nil, 3)
+    end
+end })
+secTeleport:AddButton({ Title = "Teleport to Spawn", Icon = "solar/home-bold", Callback = function()
+    local _, hrp = getChar()
+    if hrp then
+        local spawn = workspace:FindFirstChildOfClass("SpawnLocation")
+        if spawn then hrp.CFrame = CFrame.new(spawn.Position + Vector3.new(0,3,0)) Notify("Teleport", "К спавну", "Success", nil, 2) end
+    end
+end })
+
+secMisc:AddToggle("AntiAFK", { Title = "Anti-AFK", Icon = "solar/shield-check-bold", Default = true, Callback = function(v) state.antiAFK = v end })
+secMisc:AddButton({ Title = "Rejoin Server", Icon = "solar/logout-2-bold", Callback = function() pcall(function() TeleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId, LocalPlayer) end) end })
+secMisc:AddButton({ Title = "Server Hop", Icon = "solar/planet-bold", Callback = function()
+    pcall(function()
+        local url = "https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Desc&excludeFullGames=true&limit=100"
+        local raw = game:HttpGet(url)
+        local data = HttpService:JSONDecode(raw)
+        for _, srv in ipairs(data.data) do
+            if srv.id ~= game.JobId and srv.playing < srv.maxPlayers then
+                TeleportService:TeleportToPlaceInstance(game.PlaceId, srv.id, LocalPlayer)
+                return
             end
         end
-    end
-})
-
-secMisc:AddToggle("AntiAFK", {
-    Title = "Anti-AFK",
-    Icon = "solar/shield-check-bold",
-    Default = true,
-    Callback = function(v) state.antiAFK = v end
-})
-
-secMisc:AddButton({
-    Title = "Rejoin Server",
-    Icon = "solar/logout-2-bold",
-    Callback = function()
-        pcall(function()
-            TeleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId, LocalPlayer)
-        end)
-    end
-})
-
-secMisc:AddButton({
-    Title = "Server Hop",
-    Icon = "solar/planet-bold",
-    Callback = function()
-        pcall(function()
-            local url = "https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Desc&excludeFullGames=true&limit=100"
-            local raw = game:HttpGet(url)
-            local data = HttpService:JSONDecode(raw)
-            for _, srv in ipairs(data.data) do
-                if srv.id ~= game.JobId and srv.playing < srv.maxPlayers then
-                    TeleportService:TeleportToPlaceInstance(game.PlaceId, srv.id, LocalPlayer)
-                    return
-                end
-            end
-            Notify("Server Hop", "Не найдено", "Error", nil, 3)
-        end)
-    end
-})
-
-secMisc:AddButton({
-    Title = "Reset Character",
-    Icon = "solar/restart-bold",
-    Callback = function()
-        local _, _, hum = getChar()
-        if hum then hum.Health = 0 end
-    end
-})
+        Notify("Server Hop", "Не найдено", "Error", nil, 3)
+    end)
+end })
+secMisc:AddButton({ Title = "Reset Character", Icon = "solar/restart-bold", Callback = function() local _, _, hum = getChar() if hum then hum.Health = 0 end end })
 
 secSet:AddButton({ Title = "HirukuViolet", Icon = "solar/palette-bold", Callback = function() Fluent:SetTheme("HirukuViolet") Notify("Theme", "HirukuViolet", "Success", nil, 2) end })
 secSet:AddButton({ Title = "NeonBlue", Icon = "solar/star-bold", Callback = function() Fluent:SetTheme("NeonBlue") Notify("Theme", "NeonBlue", "Success", nil, 2) end })
@@ -700,6 +532,22 @@ secSet:AddButton({ Title = "EmeraldDark", Icon = "solar/leaf-bold", Callback = f
 secSet:AddButton({ Title = "Sunset", Icon = "solar/sun-bold", Callback = function() Fluent:SetTheme("Sunset") Notify("Theme", "Sunset", "Success", nil, 2) end })
 secSet:AddButton({ Title = "SlateStatic", Icon = "solar/pause-circle-bold", Callback = function() Fluent:SetTheme("SlateStatic") Notify("Theme", "SlateStatic", "Success", nil, 2) end })
 secSet:AddButton({ Title = "SlateAnimated", Icon = "solar/play-circle-bold", Callback = function() Fluent:SetTheme("SlateAnimated") Notify("Theme", "SlateAnimated", "Success", nil, 2) end })
+
+secFont:AddDropdown("FontPicker", {
+    Title = "Font",
+    Description = "Выбери шрифт для меню",
+    Icon = "solar/text-bold",
+    Values = FONT_LIST,
+    Default = "Gotham",
+    Multi = false,
+    Callback = function(v)
+        if type(v) == "table" then
+            for k in pairs(v) do applyFont(k) break end
+        else
+            applyFont(v)
+        end
+    end
+})
 
 Fluent:SetTheme("HirukuViolet")
 
@@ -714,7 +562,8 @@ mainBtn.Name = "HirukuButton"
 mainBtn.Parent = toggleGui
 mainBtn.BackgroundColor3 = Color3.fromRGB(20,10,35)
 mainBtn.BackgroundTransparency = 0.05
-mainBtn.Position = UDim2.new(.1, 0, .1, 0)
+mainBtn.AnchorPoint = Vector2.new(0.5, 0.5)
+mainBtn.Position = UDim2.new(0.1, 0, 0.1, 0)
 mainBtn.Size = UDim2.new(0, 60, 0, 60)
 mainBtn.Text = "HL"
 mainBtn.TextColor3 = Color3.fromRGB(230,190,255)
@@ -743,6 +592,18 @@ RunService.RenderStepped:Connect(function(dt)
         grad.Rotation = (grad.Rotation + dt * 30) % 360
     end
 end)
+
+local function applyThemeToButton(themeName)
+    local theme = THEMES[themeName]
+    if not theme then return end
+    local accent = theme.Accent or Color3.fromRGB(150,35,235)
+    local bgGrad = theme.ButtonGradient and theme.ButtonGradient.Background
+    mainBtn.TextColor3 = accent
+    stroke.Color = accent
+    if bgGrad then grad.Color = bgGrad end
+end
+
+applyThemeToButton("HirukuViolet")
 
 local dragging, dragInput, dragStart, startPos = false, nil, nil, nil
 local holdingDrag, holdToken = false, 0
@@ -799,23 +660,60 @@ local function PlaySound(soundId)
     end)
 end
 
+local function findWindowFrame()
+    local pg = LocalPlayer:FindFirstChild("PlayerGui")
+    if not pg then return nil end
+    for _, gui in ipairs(pg:GetChildren()) do
+        if gui:IsA("ScreenGui") and gui.Name:lower():find("fluent") then
+            for _, obj in ipairs(gui:GetDescendants()) do
+                if obj:IsA("Frame") and obj.Name == "Main" and obj.Size.X.Offset > 300 then return obj end
+            end
+            for _, obj in ipairs(gui:GetChildren()) do
+                if obj:IsA("Frame") and obj.Size.X.Offset > 300 then return obj end
+            end
+        end
+    end
+    return nil
+end
+
+local function WindowOpenAnimation()
+    local frame = findWindowFrame()
+    if not frame then return end
+    local origSize = frame.Size
+    frame.Size = UDim2.new(origSize.X.Scale, 0, origSize.Y.Scale, 0)
+    pcall(function()
+        TweenService:Create(frame, TweenInfo.new(0.35, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = origSize}):Play()
+    end)
+end
+
 mainBtn.MouseButton1Click:Connect(function()
     PlaySound(({"7127123605","438666542"})[math.random(2)])
     uiOpen = not uiOpen
     if uiOpen then
         pcall(function() Window:Show() end)
+        task.wait(0.05)
+        WindowOpenAnimation()
     else
         pcall(function() Window:Hide() end)
     end
-    local orig = UDim2.new(0, 60, 0, 60)
+    local origSize = UDim2.new(0, 60, 0, 60)
+    local pressSize = UDim2.new(0, 48, 0, 48)
     pcall(function()
-        TweenService:Create(mainBtn, TweenInfo.new(0.08, Enum.EasingStyle.Quad), {Size = UDim2.new(0, 80, 0, 80)}):Play()
+        TweenService:Create(mainBtn, TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Size = pressSize}):Play()
     end)
     task.wait(0.08)
     pcall(function()
-        TweenService:Create(mainBtn, TweenInfo.new(0.15, Enum.EasingStyle.Back), {Size = orig}):Play()
+        TweenService:Create(mainBtn, TweenInfo.new(0.18, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Size = origSize}):Play()
     end)
 end)
+
+local oldApplyTheme = applyThemeToButton
+local function hookThemeButtons()
+    for _, btn in ipairs(Tabs.Settings:GetDescendants()) do
+        if btn:IsA("TextButton") and btn.Text:find("Hiruku") or btn.Text:find("Neon") or btn.Text:find("Emerald") or btn.Text:find("Sunset") or btn.Text:find("Slate") then
+        end
+    end
+end
 
 local function bindChar(char)
     if not char then return end
